@@ -4,6 +4,7 @@ import random
 import time
 import uuid
 
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import _md5
 # Create your views here.
@@ -57,7 +58,7 @@ def get_token():
     return md5.hexdigest()
 def register(request):
     if request.method=='GET':
-        return render(request,'register.html')
+        return render(request, 'mine/register.html')
     elif request.method=='POST':
         user=User()
         user.account = request.POST.get('account')
@@ -79,12 +80,29 @@ def register(request):
             response.set_cookie('token',user.token)
             return response
         except:
-            # num = 1
+            num = 1
             response = redirect('axf:register')
-            return render(request,'register.html',context={'num':num})
+            return render(request, 'mine/register.html', context={'num':num})
             # return response
 
-
+def login(request):
+    if request.method=='GET':
+        return render(request,'mine/login.html')
+    elif request.method=='POST':
+        account = request.POST.get('account')
+        users=User.objects.filter(account=account)
+        password = get_pswd(request.POST.get('password'))
+        if users.exists():
+            users.filter(password=password)
+            if users.exists():
+                user=users.first()
+                response=redirect('axf:mine')
+                response.set_cookie('token',user.token)
+                return response
+            else:
+                return HttpResponse('密码错误')
+        else:
+            return HttpResponse('账号不存在')
 def logout(request):
     response = redirect('axf:mine')
     response.delete_cookie('token')

@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^mine/$', views.mine, name='mine'),   # 我的
     url(r'^register/$',views.register,name='register'),
     url(r'^logout/$',views.logout,name='logout'),
+    url(r'^login/$',views.login,name='login'),
 ]
