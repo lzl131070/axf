@@ -60,6 +60,7 @@ footer .market dd {
     /*border-left: 1px solid #e0e0e0;*/
     position: relative;
     z-index: +1;
+    cursor: pointer;
 }
 .market nav ul{
     display: flex;
@@ -70,6 +71,7 @@ footer .market dd {
 }
 .market nav ul li span{
     font-size: 0.8rem;
+
 }
 .market nav ul li span i{
     margin-left: 0.4rem;
@@ -143,7 +145,8 @@ footer .market dd {
     color: grey;
 }
 .market .main-content .content-wrapper ul li a .goods-info .price{
-    margin: 0.2rem 0;
+    margin-top:-0.2rem ;
+    /*margin: 0.2rem 0;*/
 }
 .market .main-content .content-wrapper ul li a .goods-info .price .now-price{
     color: red;

@@ -28,8 +28,27 @@ def home(request):  # 首页
     return render(request, 'home/home.html',context=data)
 
 
-def market(request):    # 闪购超市
-    return render(request, 'market/market.html')
+def market(request,categoryid):    # 闪购超市
+    foodtypes = Foodtypes.objects.all()
+    # typeid=foodtypes.filter(typeid=categoryid).first()
+    foodtype = foodtypes.filter(typeid=categoryid)[0]
+    strid = foodtype.childtypenames
+    listname = strid.split('#')
+    listbounce = []
+    for i in listname:
+        iList=i.split(":")
+        dirt={
+            'childname':iList[0],
+            'childnum':iList[1]
+        }
+        listbounce.append(dirt)
+    goods=Goods.objects.filter(categoryid=categoryid)
+    data={
+        'foodtypes': foodtypes,
+        'goods':goods,
+        'listbounce':listbounce,
+    }
+    return render(request, 'market/market.html',context=data)
 
 
 def cart(request):  # 购物车
@@ -39,6 +58,7 @@ def cart(request):  # 购物车
 def mine(request):  # 我的
     token = request.COOKIES.get('token')
     users = User.objects.filter(token=token)
+
     data = {
 
     }

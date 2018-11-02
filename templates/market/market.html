@@ -1,11 +1,85 @@
 {% extends 'base/base.html' %}
 
 {% block title %}
+    {% load static %}
     爱鲜蜂 | 闪购超市
 {% endblock %}
 {% block extcss %}
     <link rel="stylesheet" href="/static/market/css/market.css">
 {% endblock %}
+{% block extjs %}
+    <script src="{% static 'market/js/market.js' %}"></script>
+{% endblock %}
 {% block content %}
-    闪购超市
+    <div class="market">
+        <div class="type-slider">
+
+            <ul>
+                {% for foodtype in foodtypes %}
+
+                <li class="type-item">
+                    <span></span>
+                    <a href="{% url 'axf:market' foodtype.typeid %}">{{ foodtype.typename }}</a></li>
+                {% endfor %}
+
+            </ul>
+        </div>
+
+        <nav>
+            <ul>
+                <li id="categoryBt"><span> 全部类型 <i class="glyphicon glyphicon-triangle-top"></i></span></li>
+                <li id="sortBt"><span>综合排序 <i class="glyphicon glyphicon-triangle-top"></i></span></li>
+            </ul>
+        </nav>
+
+        <div class="main-content">
+            <div class="bounce-view category-view">
+                <div class="bounce-wrapper" style="display: block">
+                    {% for bounce in listbounce %}
+                        <a href="">{{ bounce.childname }}</a>
+                    {% endfor %}
+
+                </div>
+            </div>
+             <div class="bounce-view sort-view">
+                 <div class="bounce-wrapper">
+                     <a href="">综合排序</a>
+                     <a href="">销量排序</a>
+                     <a href="">价格最低</a>
+                     <a href="">价格最高</a>
+                 </div>
+             </div>
+            <div class="content-wrapper">
+                <ul>
+                {% for good in goods %}
+            <li><a href=""><img src="{{ good.productimg }}" class="goods-img">
+            <div class="goods-info">
+                <p class="name">{{ good.productlongname }}</p>
+                <p class="detailtag">{% if good.isxf %}
+                    <span class="xf">精选</span>
+
+                {% endif %}
+                <span>{{ good.productnum }}</span></p>
+                <p class="specifics">{{ good.specifics }}</p>
+            <p class="price">
+                <span class="now-price">{{ good.price }}</span>
+                <span class="market-price">{{ good.marketprice }}</span>
+            </p>
+            </div>
+
+
+
+            </a> <div class="bt-wrapper">
+                                <span class="glyphicon glyphicon-minus"></span>
+                                <span class="num">0</span>
+                                <span class="glyphicon glyphicon-plus"></span>
+</div></li>  {% endfor %}
+           </ul>
+            </div>
+
+            
+        </div>
+
+
+    </div>
 {% endblock %}
