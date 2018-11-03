@@ -19,7 +19,7 @@
 
                 <li class="type-item">
                     <span></span>
-                    <a href="{% url 'axf:market' foodtype.typeid %}">{{ foodtype.typename }}</a></li>
+                    <a href="{% url 'axf:market' foodtype.typeid 0 0 %}">{{ foodtype.typename }}</a></li>
                 {% endfor %}
 
             </ul>
@@ -27,7 +27,7 @@
 
         <nav>
             <ul>
-                <li id="categoryBt"><span> 全部类型 <i class="glyphicon glyphicon-triangle-top"></i></span></li>
+                <li id="categoryBt"><span> 全部分类 <i class="glyphicon glyphicon-triangle-top"></i></span></li>
                 <li id="sortBt"><span>综合排序 <i class="glyphicon glyphicon-triangle-top"></i></span></li>
             </ul>
         </nav>
@@ -36,17 +36,17 @@
             <div class="bounce-view category-view">
                 <div class="bounce-wrapper" style="display: block">
                     {% for bounce in listbounce %}
-                        <a href="">{{ bounce.childname }}</a>
+                        <a href="{% url 'axf:market' categoryid bounce.childnum 0 %}">{{ bounce.childname }}</a>
                     {% endfor %}
 
                 </div>
             </div>
              <div class="bounce-view sort-view">
                  <div class="bounce-wrapper">
-                     <a href="">综合排序</a>
-                     <a href="">销量排序</a>
-                     <a href="">价格最低</a>
-                     <a href="">价格最高</a>
+                     <a href="{% url 'axf:market' categoryid childid 0 %}">综合排序</a>
+                     <a href="{% url 'axf:market' categoryid childid 1 %}">销量排序</a>
+                     <a href="{% url 'axf:market' categoryid childid 2 %}">价格最低</a>
+                     <a href="{% url 'axf:market' categoryid childid 3 %}">价格最高</a>
                  </div>
              </div>
             <div class="content-wrapper">
@@ -71,7 +71,7 @@
 
             </a> <div class="bt-wrapper">
                                 <span class="glyphicon glyphicon-minus"></span>
-                                <span class="num">0</span>
+                                <span class="num">1</span>
                                 <span class="glyphicon glyphicon-plus"></span>
 </div></li>  {% endfor %}
            </ul>

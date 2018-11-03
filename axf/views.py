@@ -28,13 +28,17 @@ def home(request):  # 首页
     return render(request, 'home/home.html',context=data)
 
 
-def market(request,categoryid):    # 闪购超市
+def market(request,categoryid,childid,sort):    # 闪购超市
+
     foodtypes = Foodtypes.objects.all()
     # typeid=foodtypes.filter(typeid=categoryid).first()
+    # categoryid = foodtypes[int(categoryid)].typeid
     foodtype = foodtypes.filter(typeid=categoryid)[0]
     strid = foodtype.childtypenames
     listname = strid.split('#')
     listbounce = []
+
+
     for i in listname:
         iList=i.split(":")
         dirt={
@@ -42,12 +46,34 @@ def market(request,categoryid):    # 闪购超市
             'childnum':iList[1]
         }
         listbounce.append(dirt)
-    goods=Goods.objects.filter(categoryid=categoryid)
+    # childid = listbounce[int(childid)]['childnum']
+    if childid=='0':
+        goods=Goods.objects.filter(categoryid=categoryid)
+    else:
+        goods=Goods.objects.filter(categoryid=categoryid).filter(childcid=childid)
+
+    if sort == '0':
+        pass
+    elif sort == '1':
+
+        goods = goods.order_by('-productnum')
+    elif sort == '2':
+        goods = goods.order_by('price')
+    elif sort == '3':
+        goods = goods.order_by('-price')
+
     data={
         'foodtypes': foodtypes,
         'goods':goods,
         'listbounce':listbounce,
+        'categoryid':categoryid,
+        'childid':childid,
+        'sort':sort,
     }
+    # response = redirect('axf:market')
+    # response.delete_cookie('cartext')
+    # catsort = request.COOKIES.get('cartext')
+
     return render(request, 'market/market.html',context=data)
 
 

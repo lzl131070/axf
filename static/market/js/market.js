@@ -3,119 +3,105 @@ $(function () {
     $('.market').width(innerWidth)
 
 
-    // 获取下标 typeIndex
     typeIndex = $.cookie('typeIndex')
     console.log(typeIndex)
     if(typeIndex){
-        $('.type-slider .type-item').eq(typeIndex).addClass('active')
+        $('.type-slider .type-item').
+        eq(typeIndex).addClass('active')
     } else {
         $('.type-slider .type-item:first').addClass('active')
     }
 
-    $('.type-slider .type-item').click(function () {
+    $('.type-item').click(function () {
         $.cookie('typeIndex', $(this).index(),{exprires:3, path:'/'})
     })
 
+        // categoryBt.onclick = function () {
+        //     // document.getElementsByClassName('bounce-view').style.display = 'block'
+        // }
+        var a=0
 
-    var alltypeBt = false
-    var sortBt = false
-    $('#allBt').click(function () {
+        $('#categoryBt').click(function () {
+                // a=0?a=0:a=1;
+                a==0?categoryshow():categoryhide();
 
-        alltypeBt = !alltypeBt
+        })
+        function categoryshow() {
 
-        if (alltypeBt){ // 显示
-            $('.bounce-view.type-view').show()
-            $('#allBt b').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down')
-
-            sortBt = false
-            $('.bounce-view.sort-view').hide()
-            $('#sortBt b').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up')
-        } else {    // 隐藏
-            $('.bounce-view.type-view').hide()
-            $('#allBt b').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up')
+             $('.bounce-view.category-view').show()
+            a=1
+            $('#categoryBt i').removeClass('glyphicon-triangle-top').addClass('glyphicon-triangle-bottom')
+            sorthide()
         }
-    })
+         function categoryhide() {
+             $('.bounce-view.category-view').hide()
+            $('#categoryBt i').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-top')
 
-    $('#sortBt').click(function () {
-        // 取反
-        sortBt = !sortBt
-
-        if (sortBt){ // 显示
+             a=0
+        }
+        b=0
+        $('#sortBt').click(function () {
+            b==0?sortshow():sorthide()
+        })
+        function sortshow() {
             $('.bounce-view.sort-view').show()
-            $('#sortBt b').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down')
+            b=1
+            $('#sortBt i').removeClass('glyphicon-triangle-top').addClass('glyphicon-triangle-bottom')
 
-            alltypeBt = false
-            $('.bounce-view.type-view').hide()
-            $('#allBt b').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up')
-        } else {    // 隐藏
+            categoryhide()
+        }
+        function sorthide() {
             $('.bounce-view.sort-view').hide()
-            $('#sortBt b').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up')
+            b=0
+            $('#sortBt i').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-top')
+
         }
-    })
 
-    $('.bounce-view').click(function () {
-        alltypeBt = false
-        $('.bounce-view.type-view').hide()
-            $('#allBt b').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up')
-
-        sortBt = false
-        $('.bounce-view.sort-view').hide()
-        $('.bounce-view.sort-view').hide()
-            $('#sortBt b').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up')
-    })
-
-
-
-    // 购物车操作
-    // 默认隐藏
-    $('.bt-wrapper>.glyphicon-minus').hide()
-    $('.bt-wrapper>.num').hide()
-
-    // 购物车数据不为，即显示
-    // each 遍历操作
-    $('.bt-wrapper>.num').each(function () {
-        if(parseInt($(this).html())){
-            $(this).show()
-            $(this).prev().show()
+        // sorti=$('#sortBt i')
+        // $('.bounce-view.sort-view .bounce-wrapper a').click(function () {
+        //     $.cookie('sorttext',$(this).text(),{exprires: 3,path: '/'})
+        // })
+        // sorttext = $.cookie('sorttext')
+        // if (sorttext){
+        //     $('#sortBt span').text(sorttext)
+        // }
+        // var $cati =
+        $('.bounce-view.category-view .bounce-wrapper a').click(function () {
+            $.cookie('cattext',$(this).html(),{exprires: 1,path:'/'})
+        })
+        var catsort = $.cookie('cattext')
+        if(catsort){
+            var $new = '<span>'+catsort+'<i class="glyphicon glyphicon-triangle-top"></i></span>'
+            // $new.html(catsort)
+            // console.log($new)
+            $('#categoryBt').html($new);
+            // $.cookie('cattext','全部分类',{exprires:-1})
         }
-    })
-    
-    // 加操作
-    $('.bt-wrapper>.glyphicon-plus').click(function () {
-        // 商品ID
-        var goodsid = $(this).attr('goodsid')
-        var $that = $(this) // 将this保存起来，因为在ajax请求中，this指向有问题
-
-        // 发起ajax请求
-        $.get('/axf/addtocart/', {'goodsid':goodsid}, function (response) {
-            if (response['status'] == '-1'){    // 未登录
-                // 跳转到登录界面
-                window.open('/axf/login/', target="_self")
-            } else {    // 已登录
-                console.log(response)
-                $that.prev().html(response['number']).show()
-                $that.prev().prev().show()
-            }
+        $('.type-item a').click(function () {
+            $.cookie('cattext','全部分类',{exprires:1,path:'/'})
+            $.cookie('sortbt','综合排序',{exprires: 1,path:'/'})
         })
-    })
+        // else {
+        //     var $new = '<span>'+'全部分类'+'<i class="glyphicon glyphicon-triangle-top"></i></span>'
+        //     $('#categoryBt').html($new)
+        // }
 
 
-    // 减操作
-    $('.bt-wrapper>.glyphicon-minus').click(function () {
-        var goodsid = $(this).attr('goodsid')
-        var $that = $(this)
-
-        $.get('/axf/subtocart/', {'goodsid':goodsid}, function (response) {
-            console.log(response)
-            if (response['status'] == '1'){
-                var number = parseInt(response['number'])
-                if (number>0){  // 显示
-                    $that.next().html(response['number'])
-                } else {    // 隐藏
-                    $that.next().hide()
-                    $that.hide()
-                }
-            }
+        var sortbt = $.cookie('sortbt')
+        $('.bounce-view.sort-view .bounce-wrapper a').click(function () {
+            $.cookie('sortbt',$(this).html(),{exprires: 1,path:'/'})
         })
-    })
+        if(sortbt){
+             var $sort = '<span>'+sortbt+'<i class="glyphicon glyphicon-triangle-top"></i></span>'
+            $('#sortBt').html($sort)
+        }
+        $('.bt-wrapper .glyphicon.glyphicon-minus').click(function () {
+            var a=$('this+.num').html();
+            a = parseInt(a)
+            if(a!=0){
+                $('this+.num').html(a-1)
+            }
+
+
+        })
 })

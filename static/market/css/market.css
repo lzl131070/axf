@@ -59,12 +59,14 @@ footer .market dd {
     background: #fafafa;
     /*border-left: 1px solid #e0e0e0;*/
     position: relative;
-    z-index: +1;
+    z-index: 200;
     cursor: pointer;
+
 }
 .market nav ul{
     display: flex;
     border-left: 1px solid #e0e0e0;
+    z-index: 4;
 }
 .market nav ul li{
     width: 50%;
@@ -191,10 +193,12 @@ footer .market dd {
     right: 0;
     bottom: 0;
     display: none;
+    z-index: 3;
 }
 .market .main-content .bounce-view .bounce-wrapper{
     background: white;
     padding: 0.5rem;
+    z-index: 2;
 }
 .market .main-content .bounce-view .bounce-wrapper a{
     border: 1px solid #e0e0e0;
@@ -203,6 +207,7 @@ footer .market dd {
     font-size: 0.625rem;
     margin-top: 0.2rem;
     margin-left: 0.2rem;
+    z-index: 3;
 }
 
 
