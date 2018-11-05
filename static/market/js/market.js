@@ -95,13 +95,22 @@ $(function () {
              var $sort = '<span>'+sortbt+'<i class="glyphicon glyphicon-triangle-top"></i></span>'
             $('#sortBt').html($sort)
         }
+        // 购物车
+
+
+        // 减操作
         $('.bt-wrapper .glyphicon.glyphicon-minus').click(function () {
-            var a=$('this+.num').html();
+            var a=$(this).next().html();
             a = parseInt(a)
             if(a!=0){
-                $('this+.num').html(a-1)
+                $(this).next().html(a-1)
             }
+        })
+        $('.bt-wrapper .glyphicon.glyphicon-plus').click(function () {
+            var a=$(this).prev().html();
+            a = parseInt(a)
 
+            $(this).prev().html(a+1)
 
         })
 })

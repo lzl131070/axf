@@ -52,7 +52,8 @@
             <div class="content-wrapper">
                 <ul>
                 {% for good in goods %}
-            <li><a href=""><img src="{{ good.productimg }}" class="goods-img">
+            <li>
+            <a href=""><img src="{{ good.productimg }}" class="goods-img">
             <div class="goods-info">
                 <p class="name">{{ good.productlongname }}</p>
                 <p class="detailtag">{% if good.isxf %}
@@ -66,14 +67,14 @@
                 <span class="market-price">{{ good.marketprice }}</span>
             </p>
             </div>
-
-
-
-            </a> <div class="bt-wrapper">
+            </a>
+                <div class="bt-wrapper">
                                 <span class="glyphicon glyphicon-minus"></span>
-                                <span class="num">1</span>
+                                <span class="num">0</span>
                                 <span class="glyphicon glyphicon-plus"></span>
-</div></li>  {% endfor %}
+                </div>
+            </li>
+                {% endfor %}
            </ul>
             </div>
 
