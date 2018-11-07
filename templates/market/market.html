@@ -51,6 +51,9 @@
              </div>
             <div class="content-wrapper">
                 <ul>
+
+
+
                 {% for good in goods %}
             <li>
             <a href=""><img src="{{ good.productimg }}" class="goods-img">
@@ -69,12 +72,24 @@
             </div>
             </a>
                 <div class="bt-wrapper">
-                                <span class="glyphicon glyphicon-minus"></span>
-                                <span class="num">0</span>
-                                <span class="glyphicon glyphicon-plus"></span>
+                                <span class="glyphicon glyphicon-minus" isid="{{ good.id }}"></span>
+
+
+
+                           <span class="num">
+                               {% for foo in cart %}
+                        {% if foo.goodid == good %}
+                            {{ foo.num }}
+                        {% endif %}
+                    {% endfor %}
+                           </span>
+                                <span class="glyphicon glyphicon-plus" isid="{{ good.id }}"></span>
                 </div>
             </li>
                 {% endfor %}
+
+
+
            </ul>
             </div>
 

@@ -24,8 +24,11 @@ footer .market dd {
     z-index: 9;
 }
 .market .type-slider ul{
+
+    overflow: scroll;
 }
 .market .type-slider ul li{
+    z-index: 201;
     list-style: none;
     text-align: center;
     border-bottom: 1px solid #e0e0e0;

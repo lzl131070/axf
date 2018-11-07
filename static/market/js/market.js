@@ -86,7 +86,13 @@ $(function () {
         //     $('#categoryBt').html($new)
         // }
 
+        $('.num').each(function () {
 
+            if($(this).html()==0){
+                $(this).hide()
+                $(this).prev().hide()
+            }
+        })
         var sortbt = $.cookie('sortbt')
         $('.bounce-view.sort-view .bounce-wrapper a').click(function () {
             $.cookie('sortbt',$(this).html(),{exprires: 1,path:'/'})
@@ -100,17 +106,49 @@ $(function () {
 
         // 减操作
         $('.bt-wrapper .glyphicon.glyphicon-minus').click(function () {
-            var a=$(this).next().html();
-            a = parseInt(a)
-            if(a!=0){
-                $(this).next().html(a-1)
-            }
-        })
-        $('.bt-wrapper .glyphicon.glyphicon-plus').click(function () {
-            var a=$(this).prev().html();
-            a = parseInt(a)
+            // var a=$(this).next().html();
+            // a = parseInt(a)
+            // a--
+            // $(this).next().html(a)
+            // if(a==0){
+            //     $(this).hide()
+            //     $(this).next().hide()
+            // }
+            var $that = $(this)
+            var goodid = $(this).attr('isid')
+            $.get('/reduce/',{'goodid':goodid},function (response) {
+                console.log(response)
+                if (response.num==0){
+                    $that.next().hide()
+                    $that.hide()
+                } else {
+                    $that.next().html(response.num)
 
-            $(this).prev().html(a+1)
+                }
+            })
+
+        })
+
+        $('.bt-wrapper .glyphicon.glyphicon-plus').click(function () {
+            var $that = $(this)
+            // var a=$(this).prev().html();
+            // a = parseInt(a)
+            // $(this).prev().prev().show()
+            // a++
+            // $(this).prev().html(a).show()
+            var goodid = $(this).attr('isid')
+            $.get('/addcart/',{'goodid':goodid},function (response) {
+                console.log(response)
+                if (response.status==-1){
+                    window.open('/login/',target='_self')
+                }
+                else if (response.status==1){
+                        console.log('yes')
+
+                        $that.prev().html(response.num).show()
+                        $that.prev().prev().show()
+                }
+            })
 
         })
 })

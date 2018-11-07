@@ -4,12 +4,12 @@ import random
 import time
 import uuid
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 import _md5
 # Create your views here.
 from AXF import settings
-from axf.models import Goods, Wheel, Mainshow, Mustbuy, Foodtypes, Nav, Shop, User
+from axf.models import Goods, Wheel, Mainshow, Mustbuy, Foodtypes, Nav, Shop, User, Cart
 
 
 def home(request):  # 首页
@@ -29,6 +29,13 @@ def home(request):  # 首页
 
 
 def market(request,categoryid,childid,sort):    # 闪购超市
+
+    token = request.COOKIES.get('token')
+    user = User.objects.filter(token=token).first()
+    cart = Cart.objects.filter(userid=user)
+
+
+
 
     foodtypes = Foodtypes.objects.all()
     # typeid=foodtypes.filter(typeid=categoryid).first()
@@ -69,6 +76,7 @@ def market(request,categoryid,childid,sort):    # 闪购超市
         'categoryid':categoryid,
         'childid':childid,
         'sort':sort,
+        'cart':cart
     }
     # response = redirect('axf:market')
     # response.delete_cookie('cartext')
@@ -78,8 +86,14 @@ def market(request,categoryid,childid,sort):    # 闪购超市
 
 
 def cart(request):  # 购物车
-    return render(request,'cart/cart.html')
+    token = request.COOKIES.get('token')
+    if token:
+        user = User.objects.get(token=token)
+        carts = Cart.objects.filter(userid=user)
 
+        return render(request,'cart/cart.html',context={'carts':carts})
+    else:
+        return render(request,'mine/login.html')
 
 def mine(request):  # 我的
     token = request.COOKIES.get('token')
@@ -153,3 +167,48 @@ def logout(request):
     response = redirect('axf:mine')
     response.delete_cookie('token')
     return response
+
+
+
+def addcart(request):
+    token = request.COOKIES.get('token')
+    goodid = request.GET.get('goodid')
+    print(goodid)
+    Jsondata={
+        'goodid':goodid,
+    }
+    if token:
+        Jsondata['status']=1
+        user = User.objects.get(token=token)
+        good = Goods.objects.get(pk=goodid)
+        cart = Cart.objects.filter(userid=user).filter(goodid=good)
+        if cart.exists():
+            cart = cart.first()
+            cart.num += 1
+            Jsondata['num'] = cart.num
+            cart.save()
+        else:
+            cart = Cart()
+            cart.userid = user
+            cart.goodid = good
+            cart.num = 1
+            Jsondata['num'] = cart.num
+            cart.save()
+
+    else:
+        Jsondata['status']=-1
+
+    return JsonResponse(Jsondata)
+
+
+def reduce(request):
+    goodid = request.GET.get('goodid')
+    cart = Cart.objects.get(goodid=goodid)
+    cart.num-=1
+    cart.save()
+    Jsondata = {
+        'goodid':goodid,
+        'num':cart.num
+    }
+
+    return JsonResponse(Jsondata)

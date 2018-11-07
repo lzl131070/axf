@@ -30,4 +30,12 @@ class User(models.Model):
     tel = models.CharField(max_length=20)
     adv = models.CharField(max_length=255)
     img = models.CharField(max_length=255,default='/static/uploads/axf.png')
+    rank = models.IntegerField(default=1)
     token= models.CharField(max_length=255)
+
+class Cart(models.Model):
+    userid = models.ForeignKey(User)
+    goodid = models.ForeignKey(Goods)
+    num = models.IntegerField()
+    isselect=models.BooleanField(default=True)
+
