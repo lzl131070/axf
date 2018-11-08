@@ -12,5 +12,7 @@ urlpatterns = [
     url(r'^logout/$',views.logout,name='logout'),
     url(r'^login/$',views.login,name='login'),
     url(r'^addcart/$',views.addcart,name='addcart'),
-    url(r'^reduce/$',views.reduce,name='reduce')
+    url(r'^reduce/$',views.reduce,name='reduce'),
+    url(r'^checkone/$',views.checkone,name='checkone'),
+    url(r'^checkall/$',views.checkall,name='checkall'),
 ]

@@ -11,8 +11,8 @@
    <div class="cart">
         <ul>
             {% for cart in carts %}
-                <li>
-                    <div class="confirm-wrapper">
+                <li class="goods">
+                    <div class="confirm-wrapper" isid="{{ cart.id }}">
 
                         {% if cart.isselect %}
                             <span class="glyphicon glyphicon-ok"></span>
@@ -28,10 +28,10 @@
                             <p class="name">
                                 {{ cart.goodid.productlongname }}
                             </p>
-                            <p class="price">
+                            <p class="price" str="{{ cart.goodid.marketprice }}">
                                 ￥{{ cart.goodid.marketprice }}
                             </p>
-                            <p class="num">
+                            <p class="num" str="{{ cart.num }}">
                                 x{{ cart.num }}
                             </p>
                         </div>
@@ -42,7 +42,7 @@
 
         <div class="bill">
             <div class="bill-left">
-                <div class="all">
+                <div class="all" isall="false">
                     <span class="no"></span>
                     <b>全选</b>
                 </div>

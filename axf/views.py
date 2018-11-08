@@ -89,7 +89,7 @@ def cart(request):  # 购物车
     token = request.COOKIES.get('token')
     if token:
         user = User.objects.get(token=token)
-        carts = Cart.objects.filter(userid=user)
+        carts = Cart.objects.filter(userid=user).exclude(num=0)
 
         return render(request,'cart/cart.html',context={'carts':carts})
     else:
@@ -174,6 +174,7 @@ def addcart(request):
     token = request.COOKIES.get('token')
     goodid = request.GET.get('goodid')
     print(goodid)
+    print('test+++++')
     Jsondata={
         'goodid':goodid,
     }
@@ -202,13 +203,54 @@ def addcart(request):
 
 
 def reduce(request):
+    token = request.COOKIES.get('token')
+    user = User.objects.get(token=token)
     goodid = request.GET.get('goodid')
-    cart = Cart.objects.get(goodid=goodid)
+    cart = Cart.objects.get(goodid=goodid,userid=user)
     cart.num-=1
     cart.save()
+    print('test-----')
     Jsondata = {
         'goodid':goodid,
         'num':cart.num
     }
 
     return JsonResponse(Jsondata)
+
+def checkone(request):
+    token = request.COOKIES.get('token')
+    user = User.objects.get(token=token)
+    cartid = request.GET.get('isid')
+    cart = Cart.objects.get(pk=cartid,userid=user)
+    print(cart.isselect)
+    cart.isselect = not cart.isselect
+    cart.save()
+    data={
+        'isselect':cart.isselect,
+        'status':1,
+
+    }
+
+    return JsonResponse(data)
+
+
+def checkall(request):
+    token = request.COOKIES.get('token')
+    user = User.objects.get(token=token)
+    isselect = request.GET.get('isall')
+    if isselect=='true':
+        isselect = True
+    else:
+        isselect=False
+    print(isselect)
+    carts = Cart.objects.filter(userid=user)
+    for cart in carts:
+        cart.isselect = isselect
+        cart.save()
+    data={
+        'isselect':isselect,
+        'status':1,
+
+    }
+    return JsonResponse(data)
+

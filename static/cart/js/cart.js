@@ -1,27 +1,38 @@
 $(function () {
     $('.cart').width(innerWidth)
+    if($('.goods .confirm-wrapper .glyphicon-ok').length == $('.goods').length){
+        $('.bill-left .all').attr('isall','true')
+        $('.bill-left .all span').removeClass('no').addClass('glyphicon glyphicon-ok')
+    }
 
     // 总计
     total()
 
     // 商品 选中 状态
     $('.cart .confirm-wrapper').click(function () {
-        var cartid = $(this).attr('cartid')
+        var isid = $(this).attr('isid')
         var $that = $(this)
 
-        $.get('/axf/changecartstatus/', {'cartid':cartid}, function (response) {
-            console.log(response)
-            if (response['status'] == '1'){
-                var isselect = response['isselect']
+        $.get('/checkone/', {'isid':isid}, function (response) {
+            console.log(response.isselect)
+            if (response.status == 1){
+                var isselect = response.isselect
                 $that.attr('isselect', isselect)
-                // 先清空
-                $that.children().remove()
-                if (isselect){  // 选中
-                    $that.append('<span class="glyphicon glyphicon-ok"></span>')
-                } else {    // 未选中
-                    $that.append('<span class="no"></span>')
-                }
 
+                if (isselect){
+                    $that.find('span').removeClass('no').addClass('glyphicon glyphicon-ok')
+                } else {    // 未选中
+                    $that.find('span').addClass('no').removeClass('glyphicon glyphicon-ok')
+                }
+                if($('.goods .confirm-wrapper .glyphicon-ok').length == $('.goods').length){
+        $('.bill-left .all').attr('isall','true')
+        $('.bill-left .all span').removeClass('no').addClass('glyphicon glyphicon-ok')
+    } else {
+        $('.bill-left .all span').addClass('no').removeClass('glyphicon glyphicon-ok')
+        $('.bill-left .all').attr('isall','false')
+
+
+                }
                 // 总计
                 total()
             }
@@ -30,23 +41,23 @@ $(function () {
 
     // 全选/取消全选
     $('.cart .bill .all').click(function () {
-        var isall = $(this).attr('isall')
-        isall = (isall == 'false') ? true : false
-        $(this).attr('isall', isall)
-
+        var isall = $(this).attr('isall');
+        isall = (isall == 'false') ? true : false;
+        $(this).attr('isall', isall);
+        console.log(isall);
         // 自身状态
-        $(this).children().remove()
+
         if (isall){ // 全选
-            $(this).append('<span class="glyphicon glyphicon-ok"></span>').append('<b>全选</b>')
+            $(this).find('span').removeClass('no').addClass('glyphicon glyphicon-ok');
         } else {    // 取消全选
-            $(this).append('<span class="no"></span>').append('<b>全选</b>')
-        }
+            $(this).find('span').addClass('no').removeClass('glyphicon glyphicon-ok');
+        };
 
 
         // 发起ajax请求
-        $.get('/axf/changecartselect/', {'isall':isall}, function (response) {
-            console.log(response)
-            if (response['status'] == '1'){
+        $.get('/checkall/', {'isall':isall}, function (response) {
+
+            if (response.status == 1){
                 // 遍历
                 $('.confirm-wrapper').each(function () {
                     $(this).attr('isselect', isall)
@@ -73,15 +84,13 @@ $(function () {
             var $confirm = $(this).find('.confirm-wrapper')
             var $content = $(this).find('.content-wrapper')
 
-            // 选中，才计算
             if ($confirm.find('.glyphicon-ok').length){
-                var price = parseInt($content.find('.price').attr('str'))
-                var num = parseInt($content.find('.num').attr('str'))
+                var price = $content.find('.price').attr('str')
+                var num = $content.find('.num').attr('str')
                 sum += num * price
             }
         })
 
-        // 修改总计 显示
         $('.bill .total b').html(sum)
     }
 

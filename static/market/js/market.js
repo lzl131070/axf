@@ -115,6 +115,7 @@ $(function () {
             //     $(this).next().hide()
             // }
             var $that = $(this)
+            console.log('-')
             var goodid = $(this).attr('isid')
             $.get('/reduce/',{'goodid':goodid},function (response) {
                 console.log(response)
@@ -131,6 +132,7 @@ $(function () {
 
         $('.bt-wrapper .glyphicon.glyphicon-plus').click(function () {
             var $that = $(this)
+            console.log('+')
             // var a=$(this).prev().html();
             // a = parseInt(a)
             // $(this).prev().prev().show()
